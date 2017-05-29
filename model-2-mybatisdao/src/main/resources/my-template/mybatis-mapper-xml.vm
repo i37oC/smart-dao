@@ -22,7 +22,7 @@
 
 
 
-	<select id="load" parameterType="${class.pkIbatisDataType}" resultMap="${objectName}Map" >
+	<select id="load" parameterType="${class.pkField.type}" resultMap="${objectName}Map" >
 		select * from ${name} where ${class.pkField.columnName}=#{${class.pkField.name}}
 	</select>
 
@@ -32,12 +32,14 @@
     <insert id="insert" parameterType="${objectName}">
         insert into
 		${name}(
+		${class.pkField.columnName}
 		#foreach($column in $class.fields)
 
-		<if test="${column.name} != null">,$column.name</if>
+		<if test="${column.name} != null">,$column.columnName</if>
 		#end
 
         )values(
+        #{${class.pkField.columnName}}
 		#foreach($column in $class.fields)
 
 		<if test="${column.name} != null">,#{${column.name},jdbcType=$column.jdbcType}</if>
@@ -58,7 +60,7 @@
     </update>
 
 
-    <select id="delete" parameterType="${class.pkIbatisDataType}" >
+    <select id="delete" parameterType="${class.pkField.type}" >
     	delete from ${name} where  ${class.pkField.name}=#{${class.pkField.name}}
     </select>
 

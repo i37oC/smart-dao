@@ -9,15 +9,13 @@ import org.xyy.model2mybatisdao.config.Config;
  * @since 1.0
  */
 public class MybatisDaoGeneratorTest {
-    private String modelpath = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/test/java";
-    private String querypath = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/test/java";
-    private String mapperpath = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/test/java";
-    private String sqlpath = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/test/java";
+    private String javamodelpath = "/Users/xyy/IdeaProjects/smart-dao/smart-dao-example/src/main/java";
+    private String sqlpath = "/Users/xyy/IdeaProjects/smart-dao/smart-dao-example/src/main/resources";
 
-    private String modelPackage = "org.xyy.model2mybatisdao.target.entity";
-    private String queryPackage = "org.xyy.model2mybatisdao.target.query";
-    private String mapperPackage = "org.xyy.model2mybatisdao.target.mapper";
-    private String sqlPackage = "org.xyy.model2mybatisdao.target.sql";
+    private String modelPackage = "org.xyy.smart.dao.example.entity";
+    private String queryPackage = "org.xyy.smart.dao.example.query";
+    private String mapperPackage = "org.xyy.smart.dao.example.mapper";
+    private String sqlPackage = "mapper";
 
     private String modelPath = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/test/java/org/xyy/model2mybatisdao/source/User.java";
 
@@ -29,9 +27,9 @@ public class MybatisDaoGeneratorTest {
     @Test
     public void generateSingle() throws Exception {
         Config config = new Config();
-        config.setModelProject(modelpath);
-        config.setQueryProject(querypath);
-        config.setMapperProject(mapperpath);
+        config.setModelProject(javamodelpath);
+        config.setQueryProject(javamodelpath);
+        config.setMapperProject(javamodelpath);
         config.setSqlProject(sqlpath);
 
 
@@ -42,11 +40,6 @@ public class MybatisDaoGeneratorTest {
 
         MybatisDaoGenerator generator = new MybatisDaoGenerator(config);
         generator.generateSingle(modelPath);
-
-    }
-
-    @Test
-    public void generateSingle1() throws Exception {
 
     }
 

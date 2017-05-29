@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * @since 1.0
  */
 public class TableGeneratorTest {
-    private String sourcePath = "/Users/xyy/IdeaProjects/smart-dao/entity-2-mybatisdao/src/test/java/org/xyy/model2mybatisdao/source/User.java";
+    private String sourcePath = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/test/java/org/xyy/model2mybatisdao/source/User.java";
 
 
     @Test
