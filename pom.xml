@@ -18,7 +18,7 @@
 
 
     <modules>
-        <module>model-2-dbtable</module>
+        <module>model-2-mybatisdao</module>
         <module>smart-dao-example</module>
     </modules>
 
