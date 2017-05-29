@@ -1,0 +1,33 @@
+package ${config.modelPackage};
+
+import java.io.Serializable;
+import java.util.Date;
+
+
+$!{outputor.comment}
+public class ${outputor.className} implements Serializable {
+
+	##属性
+	#foreach($column in $outputor.fieldUnits)
+
+	$!column.comment
+	private ${column.type} ${column.fieldName};
+	#end
+
+	##gettor settor
+	#foreach($column in $outputor.fieldUnits)
+
+	public $column.type get${column.fieldNameFirstCharUpcase}() {
+		return ${column.fieldName};
+	}
+
+	public void set${column.fieldNameFirstCharUpcase}(${column.type} ${column.fieldName}) {
+		this.${column.fieldName} = ${column.fieldName};
+	}
+	#end
+
+	@Override
+	public String toString() {
+		return "${outputor.className} [#foreach($column in $outputor.fieldUnits)#if($velocityCount>1),#end ${column.fieldName}=" + ${column.fieldName} + "#end]";
+	}
+}

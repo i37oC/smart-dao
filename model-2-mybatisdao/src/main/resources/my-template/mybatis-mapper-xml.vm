@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+#set($objectName=$class.objectName)
+#set($name=$class.name)
+#set($tableAlias=$class.tableAlias)
+#set($param=$class.param)
+
+<mapper namespace="${config.mapperPackage}.${class.name}Mapper">
+	<resultMap id="${objectName}Map" type="${objectName}">
+		#foreach($column in $class.fields)
+			#set($be = "<id")
+			#if($column.isPk!="1")
+				#set($be = "<result")
+			#end
+
+		$be column="${column.name}" property="${column.columnName}"/>
+		#end
+
+	</resultMap>
+
+
+
+	<select id="load" parameterType="${class.pkIbatisDataType}" resultMap="${objectName}Map" >
+		select * from ${name} where ${class.pkField.columnName}=#{${class.pkField.name}}
+	</select>
+
+
+
+
+    <insert id="insert" parameterType="${objectName}">
+        insert into
+		${name}(
+		#foreach($column in $class.fields)
+
+		<if test="${column.name} != null">,$column.name</if>
+		#end
+
+        )values(
+		#foreach($column in $class.fields)
+
+		<if test="${column.name} != null">,#{${column.name},jdbcType=$column.jdbcType}</if>
+		#end
+
+		)
+    </insert>
+
+    <update id="update" parameterType="${objectName}">
+        update ${name}
+        <set>
+			#foreach($column in $class.fields)
+
+		<if test="${column.name} != null">${column.name}=#{${column.name},jdbcType=$column.jdbcType},</if>
+			#end
+        </set>
+        where  ${class.pkField.name}=#{${class.pkField.name}}
+    </update>
+
+
+    <select id="delete" parameterType="${class.pkIbatisDataType}" >
+    	delete from ${name} where  ${class.pkField.name}=#{${class.pkField.name}}
+    </select>
+
+
+</mapper>

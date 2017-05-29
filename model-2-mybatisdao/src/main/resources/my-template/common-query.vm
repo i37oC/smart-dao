@@ -1,0 +1,98 @@
+package ${config.queryPackage};
+
+import java.io.Serializable;
+import java.util.Date;
+
+
+/**
+ * ${class.name}查询对象
+ */
+public class ${class.name}Query{
+	##属性
+	#foreach($field in $class.fields)
+		#set($type=${field.type})
+        #set($length=${field.length})
+		#set($fieldName=${field.name})
+		#set($fieldName=${field.name})
+		#set($comment=${field.comment})
+		#if($field.isPk=="1" || $field.name=="status")
+			#if($field.name=="status")
+
+	private ${type} ${fieldName};
+			#end
+
+	private ${type}[] ${fieldName}Array;
+		#elseif("$field.type"=="BigDecimal" || "$field.type"=="Date")
+
+	private ${type} ${fieldName}From;
+
+	private ${type} ${fieldName}To;
+        #else
+
+    private ${type} ${fieldName};
+		#end
+		#set($comment='')				
+	#end
+
+	##gettor settor
+	#foreach($field in $class.fields)
+		#set($type=${field.type})
+        #set($length=${field.length})
+		#set($fieldName=${field.name})			
+		#set($fieldName=${field.name})
+		#set($comment=${field.comment})
+		#if($field.isPk=="1" || $field.name=="status")
+			#if($field.name=="status")
+
+    public $field.type get${field.fieldNameFirstCharUpcase}() {
+        return ${field.name};
+	}
+            
+
+    public void set${field.fieldNameFirstCharUpcase}(${field.type} ${field.name}) {
+    	this.${field.name} = ${field.name};
+    }
+    			#end
+
+    public ${type}[] get${field.fieldNameFirstCharUpcase}Array() {
+    	return ${field.name}Array;
+    }
+
+    public void set${field.fieldNameFirstCharUpcase}Array(${field.type}... ${field.name}Array) {
+    	this.${field.name}Array = ${field.name}Array;
+    }
+		#elseif("$field.type"=="BigDecimal" || "$field.type"=="Date")
+
+    public $field.type get${field.fieldNameFirstCharUpcase}From() {
+    	return ${field.name}From;
+    }
+        
+
+    public void set${field.fieldNameFirstCharUpcase}From(${field.type} ${field.name}From) {
+    	this.${field.name}From = ${field.name}From;
+    }
+			
+
+    public $field.type get${field.fieldNameFirstCharUpcase}To() {
+    	return ${field.name}To;
+    }
+        
+
+    public void set${field.fieldNameFirstCharUpcase}To(${field.type} ${field.name}To) {
+    	this.${field.name}To = ${field.name}To;
+    }
+		#else
+
+    public $field.type get${field.fieldNameFirstCharUpcase}() {
+    	return ${field.name};
+    }
+        
+
+    public void set${field.fieldNameFirstCharUpcase}(${field.type} ${field.name}) {
+    	this.${field.name} = ${field.name};
+    }
+		#end		
+		#set($comment=${field.comment})
+	#end
+
+}

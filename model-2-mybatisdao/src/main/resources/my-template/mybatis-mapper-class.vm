@@ -1,0 +1,28 @@
+package ${config.mapperPackage};
+
+import java.util.List;
+import ${config.modelPackage}.${class.name};
+import ${config.queryPackage}.${class.name}Query;
+
+public interface ${class.name}Mapper  {
+	/***/
+	${class.name} load(${class.pkField.type} id);
+
+	/***/
+	void insert(${class.name} ${class.objectName});
+
+	/***/
+	void update(${class.name} ${class.objectName});
+
+	##/***/
+	##void updateStatus(@Param("id") ${class.pkJavaDataType} id, @Param("status") Serializable status);
+
+	/***/
+	void delete(${class.pkField.type} id);
+
+	/***/
+	List<${class.name}> queryList(${class.name}Query ${class.objectName}Query);
+
+	/***/
+	int queryCount(${class.name}Query ${class.objectName}Query);
+}

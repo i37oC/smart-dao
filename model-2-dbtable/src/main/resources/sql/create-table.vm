@@ -1,0 +1,10 @@
+CREATE TABLE ${table.name}
+(
+#foreach($column in $table.fieldUnits)
+    ${column.name} ${colmn.type}
+#end
+);
+
+
+
+##属性

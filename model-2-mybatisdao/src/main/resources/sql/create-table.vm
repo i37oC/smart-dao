@@ -1,0 +1,10 @@
+CREATE TABLE ${table.name}
+(
+#foreach($column in $table.columns)
+    ${column.name} ${column.type} $!{column.comment} $!{column.canbeNull} $!{column.extra} ,
+#end
+PRIMARY KEY ($table.primaryColumn.name)
+);
+
+
+##属性

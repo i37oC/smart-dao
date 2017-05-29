@@ -1,0 +1,93 @@
+package ${outputor.param.packageNameQuery};
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+*$!{outputor.comment}查询对象
+*/
+public class ${outputor.className}Query extends ${outputor.param.baseQueryClass} implements Serializable {
+	private static final long serialVersionUID = ${outputor.serialVersionUID}1L;
+		
+	##属性
+	#foreach($column in $outputor.fieldUnits)
+		#set($type=${column.type})
+        #set($length=${column.length})
+		#set($fieldName=${column.fieldName})
+		#set($columnName=${column.columnName})
+		#set($comment=${column.comment})
+		#if($column.isPk=="1" || $column.fieldName=="status")
+			#if($column.fieldName=="status")
+				private ${type} ${fieldName};//$!comment
+			#end
+			private ${type}[] ${fieldName}Array;//$!comment
+		#elseif("$column.type"=="BigDecimal" || "$column.type"=="Date")
+			private ${type} ${fieldName}From;//$!comment
+			private ${type} ${fieldName}To;//$!comment
+        #else	
+    		private ${type} ${fieldName};//$!comment
+		#end
+		#set($comment='')				
+	#end
+
+	##gettor settor
+	#foreach($column in $outputor.fieldUnits)
+		#set($type=${column.type})
+        #set($length=${column.length})
+		#set($fieldName=${column.fieldName})			
+		#set($columnName=${column.columnName})
+		#set($comment=${column.comment})
+		#if($column.isPk=="1" || $column.fieldName=="status")
+			#if($column.fieldName=="status")
+				/***$!column.comment*/
+            	public $column.type get${column.fieldNameFirstCharUpcase}() {
+            		return ${column.fieldName};
+            	}
+            
+            	/***$!column.comment*/
+            	public void set${column.fieldNameFirstCharUpcase}(${column.type} ${column.fieldName}) {
+            		this.${column.fieldName} = ${column.fieldName};
+            	}	
+    			#end
+			/***$!comment*/
+        	public ${type}[] get${column.fieldNameFirstCharUpcase}Array() {
+        		return ${column.fieldName}Array;
+        	}
+			/***$!column.comment*/
+        	public void set${column.fieldNameFirstCharUpcase}Array(${column.type}... ${column.fieldName}Array) {
+        		this.${column.fieldName}Array = ${column.fieldName}Array;
+        	}
+		#elseif("$column.type"=="BigDecimal" || "$column.type"=="Date")
+        	/***$!column.comment*/
+        	public $column.type get${column.fieldNameFirstCharUpcase}From() {
+        		return ${column.fieldName}From;
+        	}
+        
+        	/***$!column.comment*/
+        	public void set${column.fieldNameFirstCharUpcase}From(${column.type} ${column.fieldName}From) {
+        		this.${column.fieldName}From = ${column.fieldName}From;
+        	}
+			
+			 /***$!column.comment*/
+        	public $column.type get${column.fieldNameFirstCharUpcase}To() {
+        		return ${column.fieldName}To;
+        	}
+        
+        	/***$!column.comment*/
+        	public void set${column.fieldNameFirstCharUpcase}To(${column.type} ${column.fieldName}To) {
+        		this.${column.fieldName}To = ${column.fieldName}To;
+        	}	
+		#else
+			/***$!column.comment*/
+        	public $column.type get${column.fieldNameFirstCharUpcase}() {
+        		return ${column.fieldName};
+        	}
+        
+        	/***$!column.comment*/
+        	public void set${column.fieldNameFirstCharUpcase}(${column.type} ${column.fieldName}) {
+        		this.${column.fieldName} = ${column.fieldName};
+        	}			
+		#end		
+		#set($comment=${column.comment})
+	#end
+}

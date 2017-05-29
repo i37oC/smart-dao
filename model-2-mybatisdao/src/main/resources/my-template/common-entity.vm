@@ -1,0 +1,33 @@
+package ${config.modelPackage};
+
+import java.io.Serializable;
+import java.util.Date;
+
+
+$!{class.comment}
+public class ${class.name} {
+
+	##属性
+	#foreach($field in $class.fields)
+
+	$!field.comment
+	private ${field.type} ${field.name};
+	#end
+
+	##gettor settor
+	#foreach($field in $class.fields)
+
+	public $field.type get${field.fieldNameFirstCharUpcase}() {
+		return ${field.name};
+	}
+
+	public void set${field.fieldNameFirstCharUpcase}(${field.type} ${field.name}) {
+		this.${field.name} = ${field.name};
+	}
+	#end
+
+	@Override
+	public String toString() {
+		return "${class.name} [#foreach($field in $class.fields)#if($velocityCount>1),#end ${field.name}=" + ${field.name} + "#end]";
+	}
+}

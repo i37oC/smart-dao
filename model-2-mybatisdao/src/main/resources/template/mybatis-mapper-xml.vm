@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+#set($objectName=$outputor.objectName)
+#set($name=$outputor.name)
+#set($tableAlias=$outputor.tableAlias)
+#set($param=$outputor.param)
+
+<mapper namespace="${param.packageNameMapper}.${outputor.className}Mapper">
+	<resultMap id="${objectName}Map" type="${objectName}">		
+		#foreach($column in $outputor.fieldUnits)
+			#if($column.isPk!="1")<result#else<id#end column="${column.columnName}" property="${column.fieldName}"/>#if($!{column.comment})<!-- $!{column.comment} -->#end#*jdbcType="${column.jdbcDataType}" javaType="${column.type}"*#
+		#end
+	</resultMap>
+
+	<insert id="insert" parameterType="${objectName}" #if($outputor.pkCount == 1 && ${outputor.pkFieldNames}=='id') useGeneratedKeys="true" keyProperty="${outputor.pkFieldNames}" #end>
+		#if($outputor.pkCount == 1 && ${outputor.pkFieldNames}=="id")
+		<selectKey databaseId="oracle" keyProperty="${outputor.pkFieldNames}" order="BEFORE" resultType="${outputor.pkIbatisDataType}">
+			select SEQ_${name}.nextval from dual
+		</selectKey>
+		#end
+		insert into
+		${name}(
+		#if(${outputor.pkFieldNames}=="id")
+			<if test="_databaseId == 'oracle'">ID,</if>
+			<trim prefix="" prefixOverrides=",">
+		#else
+    		#foreach($column in $outputor.columnPKs)
+    			#if($velocityCount!=1),#end${column.columnName}
+    		#end
+		#end		
+		#foreach($column in $outputor.columnNotPKs)
+			#if("${column.columnName}"=="GMT_CREATE" || "${column.columnName}"=="GMT_MODIFY" )	
+				,${column.columnName}
+			#else
+				<if test="${column.fieldName} != null">,$column.columnName</if>
+			#end			
+		#end
+		#if(${outputor.pkFieldNames}=="id")</trim>#end
+		)values(
+		#if(${outputor.pkFieldNames}=="id")
+			<if test="_databaseId == 'oracle'">#{id},</if>
+			<trim prefix="" prefixOverrides=",">
+		#else
+    		#foreach($column in $outputor.columnPKs)
+    			#{${column.fieldName}}
+    		#end
+		#end			
+		#foreach($column in $outputor.columnNotPKs)
+			#if("${column.columnName}"=="GMT_CREATE" || "${column.columnName}"=="GMT_MODIFY" )	
+				##if($velocityCount!=1),#end##
+##if($param.databaseType == "oracle")sysdate#elseif($param.databaseType == "mysql")now()#end
+			    ,<include refid="common.now" />
+			#else
+				<if test="${column.fieldName} != null">,#{${column.fieldName},jdbcType=$column.jdbcDataType}</if>
+			#end			
+		#end
+        #if(${outputor.pkFieldNames}=="id")</trim>#end		
+		)
+	</insert>
+
+	<update id="update" parameterType="${objectName}">
+		update ${name}
+		<set>			
+			#foreach($column in $outputor.columnNotPKs)						
+				#if("${column.columnName}"=="GMT_MODIFY")
+					##GMT_MODIFY=#if($param.databaseType == "oracle")sysdate#elseif($param.databaseType == "mysql")now()#end,
+					GMT_MODIFY=<include refid="common.now" />,
+				#else
+					<if test="${column.fieldName} != null">${column.columnName}=#{${column.fieldName},jdbcType=$column.jdbcDataType},</if>	
+				#end
+			#end
+		</set>		
+		where ##	
+		#foreach($column in $outputor.columnPKs)
+			#if($velocityCount!=1) and #end ${column.columnName}=#{${column.fieldName}}
+		#end
+	</update>
+	
+	#if($outputor.pkCount == 1)
+    	<select id="load" parameterType="${outputor.pkIbatisDataType}" resultMap="${objectName}Map" >
+    		select * from ${name} where ${outputor.pkColumnNames}=#{${outputor.pkFieldNames}}
+    	</select>
+	#else
+    	<select id="load" parameterType="${objectName}" resultMap="${objectName}Map" >
+    		select * from ${name} where##
+    		#foreach($column in $outputor.columnPKs)
+#if($velocityCount!=1) and #end ${column.columnName}=#{${column.fieldName}}			
+    		#end
+    	</select>
+	#end	
+
+	<sql id="queryCommonSql">
+		FROM $name $tableAlias
+		<where>
+			#foreach($column in $outputor.fieldUnits)
+				#set($type=${column.type})
+        		#set($length=${column.length})
+				#set($fieldName=${column.fieldName})			
+				#set($columnName=${column.columnName})
+				##$Length
+    			#if($column.isPk=="1")
+					<if test="${fieldName}Array != null">
+						${tableAlias}.${columnName} in
+						<foreach collection="${fieldName}Array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+					</if>
+        		#else
+            		#if(${fieldName}=="status")
+    					<choose>
+            				<when test="${fieldName} != null">and ${tableAlias}.${columnName} = #{${fieldName}}</when>
+            				<when test="${fieldName}Array != null">
+            					and ${tableAlias}.${columnName} in
+            					<foreach collection="${fieldName}Array" index="index" item="item" open="(" separator="," close=")">#{item}
+            					</foreach>
+            				</when>
+            				<otherwise>
+								##<if test="!i">					
+									and ${tableAlias}.${columnName} > 0
+								##</if>
+            				</otherwise>
+            			</choose>
+					#elseif("$type"=="BigDecimal")
+						<if test="${fieldName}From != null">and ${tableAlias}.${columnName} >= #{${fieldName}From}</if>
+						<if test="${fieldName}To != null"><![CDATA[and ${tableAlias}.${columnName} <= #{${fieldName}To}]]></if>
+					#elseif("$type"=="Integer" || "$type"=="Long" )
+						<if test="${fieldName} != null">and ${tableAlias}.${columnName} = #{${fieldName}}</if>												
+                    #elseif("$type"=="Date")
+						<if test="${fieldName}From != null">and ${tableAlias}.${columnName} >= #{${fieldName}From}</if>
+						<if test="${fieldName}To != null">
+							<choose>
+            					<when test="_databaseId == 'oracle'"><![CDATA[and ${tableAlias}.${columnName} < #{${fieldName}To} + 1]]></when>
+            					<when test="_databaseId == 'mysql'"><![CDATA[and ${tableAlias}.${columnName} < date_add(#{${fieldName}To}, interval 1 day)]]></when>
+            				</choose>							
+							##if($param.databaseType == "oracle")
+								##<![CDATA[and ${tableAlias}.${columnName} < #{${fieldName}To} + 1]]>
+							##elseif($param.databaseType == "mysql")
+								##<![CDATA[and ${tableAlias}.${columnName} < date_add(#{${fieldName}To}, interval 1 day)]]>
+							##end							
+						</if>
+					##elseif("$type"=="String" && $Length > 64)
+						##<if test="${fieldName} != null and ${fieldName}.trim() !=''">
+							##and ${tableAlias}.${columnName} like CONCAT('%',#{${fieldName}},'%')
+						##</if>
+					#else	
+            			<if test="${fieldName} != null and ${fieldName}.trim() !=''">and ${tableAlias}.${columnName} = #{${fieldName}}</if>
+        			#end		
+        		#end
+			#end
+		</where>
+	</sql>
+	
+	<sql id="sortSql">		
+		<choose>			
+			<when test="sort != null and sort.trim() !=''">
+				order by ${sort}
+			</when>
+			<otherwise>
+				<if test="sortByDefault">
+					order by ${tableAlias}.GMT_CREATE DESC
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="queryList" parameterType="${objectName}Query" resultMap="${objectName}Map">
+		<include refid="common.pageBegin" />
+		select #foreach($column in $outputor.columnPKs)			
+#if($velocityCount!=1),#end##
+${tableAlias}.${column.columnName}##
+		#end
+		<choose>
+			<when test="fieldUnits != null and fieldUnits.length>0">
+				<foreach collection="fieldUnits" index="index" item="item">,${item}</foreach>
+			</when>
+			<otherwise>
+        		#foreach($column in $outputor.columnNotPKs)
+        			#if($column.dbDataType != "CLOB")
+,${tableAlias}.${column.columnName}
+        			#end
+        		#end
+			</otherwise>
+		</choose>
+		<include refid="queryCommonSql" />
+		<include refid="sortSql" />
+		<include refid="common.pageEnd" />
+	</select>
+
+	<select id="queryCount" parameterType="${objectName}Query" resultType="int">
+		select count(1)
+		<include refid="queryCommonSql" />
+	</select>
+	
+	<update id="updateStatus" parameterType="${objectName}">		
+		update ${name} set status=#{status} where #foreach($column in $outputor.columnPKs) #if($velocityCount!=1) and #end ${column.columnName}=#{${column.fieldName}} #end
+	</update>
+	
+	#if($outputor.pkCount == 1)
+    	<delete id="delete" parameterType="${outputor.pkIbatisDataType}">
+    		delete from ${name} where ${outputor.pkColumnNames}=#{${outputor.pkFieldNames}}
+    	</delete>
+	#else
+		<delete id="delete" parameterType="${objectName}">
+    		delete from ${name} where #foreach($column in $outputor.columnPKs) #if($velocityCount!=1) and #end ${column.columnName}=#{${column.fieldName}} #end
+    	</delete>
+	#end
+</mapper>
