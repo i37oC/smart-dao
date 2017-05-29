@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://120.24.94.205:3306/cn-b2c?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: xyy123
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.xyy.smart.dao.example.entity
