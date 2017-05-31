@@ -17,8 +17,8 @@ public class MysqlColumnTypeResolver {
         maps.put("Long", "bigint(11)");
         maps.put("String", "varchar(20)");
         maps.put("Date", "timestamp");
-        maps.put("boolean", "TINYINT(1)");
-        maps.put("Boolean", "TINYINT(1)");
+        maps.put("boolean", "BOOLEAN");
+        maps.put("Boolean", "BOOLEAN");
 
     }
 

@@ -53,7 +53,7 @@
 		
 		<if test="createtime != null">,#{createtime,jdbcType=TIMESTAMP}</if>
 		
-		<if test="isGirl != null">,#{isGirl,jdbcType=BIT}</if>
+		<if test="isGirl != null">,#{isGirl,jdbcType=INTEGER}</if>
 		
 		<if test="name != null">,#{name,jdbcType=VARCHAR}</if>
 		
@@ -72,7 +72,7 @@
 			
 		<if test="createtime != null">createtime=#{createtime,jdbcType=TIMESTAMP},</if>
 			
-		<if test="isGirl != null">isGirl=#{isGirl,jdbcType=BIT},</if>
+		<if test="isGirl != null">isGirl=#{isGirl,jdbcType=INTEGER},</if>
 			
 		<if test="name != null">name=#{name,jdbcType=VARCHAR},</if>
 			
@@ -88,5 +88,86 @@
     	delete from User where  id=#{id}
     </select>
 
+
+    <sql id="queryCommonSql">
+        FROM User U
+        <where>
+										
+			<if test="idArray != null">
+				U.id in
+				<foreach collection="idArray" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+
+			
+														
+			<if test="createtimeFrom != null">and U.createtime >= #{createtimeFrom}</if>
+
+			<if test="createtimeTo != null">
+
+ 				<![CDATA[and U.createtime < date_add(#{UserTo}, interval 1 day)]]>
+
+			</if>
+
+									
+														
+			<if test="isGirl != null">and U.is_girl = #{isGirl}  </if>
+								
+														
+			<if test="name != null and name.trim() !=''">and U.name = #{name}</if>
+
+									
+														
+			<if test="age != null">and U.age = #{age}  </if>
+								
+														
+			<if test="address != null and address.trim() !=''">and U.address = #{address}</if>
+
+									
+			
+        </where>
+    </sql>
+
+
+    <sql id="sortSql">
+        <choose>
+            <when test="sort != null and sort.trim() !=''">
+                order by ${sort}
+            </when>
+        </choose>
+    </sql>
+	
+	<sql id="page">
+		limit ${StartRowBegin},${pageSize}
+	</sql>
+
+    <select id="queryCount" parameterType="userQuery" resultType="int">
+        select count(1)
+        <include refid="queryCommonSql" />
+    </select>
+
+    <select id="queryList" parameterType="userQuery" resultMap="userMap">
+        select id
+        <choose>
+            <when test="columns != null and columns.length>0">
+				<foreach collection="columns" index="index" item="item">,${item}</foreach>
+            </when>
+            <otherwise>
+																		
+				,U.createtime
+														
+				,U.is_girl
+														
+				,U.name
+														
+				,U.age
+														
+				,U.address
+									
+            </otherwise>
+        </choose>
+        <include refid="queryCommonSql" />
+        <include refid="sortSql" />
+        <include refid="page" />
+    </select>
 
 </mapper>

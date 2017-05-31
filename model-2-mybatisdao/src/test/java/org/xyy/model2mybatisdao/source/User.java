@@ -18,7 +18,8 @@ public class User {
 
     private Date createtime;
 
-    private Boolean isGirl;
+    @Datatype("tinyint(1)")
+    private int isGirl;
 
     /**
      * 名字

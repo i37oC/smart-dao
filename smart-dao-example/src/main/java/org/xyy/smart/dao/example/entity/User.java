@@ -21,7 +21,7 @@ public class User {
 	private Date createtime;
 	
 	
-	private Boolean isGirl;
+	private int isGirl;
 	
 	/**
      * 名字
@@ -55,11 +55,11 @@ public class User {
 		this.createtime = createtime;
 	}
 	
-	public Boolean getIsGirl() {
+	public int getIsGirl() {
 		return isGirl;
 	}
 
-	public void setIsGirl(Boolean isGirl) {
+	public void setIsGirl(int isGirl) {
 		this.isGirl = isGirl;
 	}
 	

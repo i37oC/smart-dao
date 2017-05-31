@@ -107,6 +107,16 @@ public class TableModelParse {
             if(!StringUtils.isEmpty(column.getLength())){
                 mysqlType = mysqlType.substring(0,mysqlType.indexOf("(")) + "("+ column.getLength() +")";
             }
+            //
+            Optional<AnnotationExpr> columntype = fieldDeclaration.getAnnotationByClass(Datatype.class);
+            if(columntype.isPresent()){
+                String yy = columntype.get().getChildNodes().get(1).toString();
+                mysqlType = yy.replaceAll("\"","");
+            }
+
+
+
+
             column.setType(mysqlType);
 
             columns.add(column);

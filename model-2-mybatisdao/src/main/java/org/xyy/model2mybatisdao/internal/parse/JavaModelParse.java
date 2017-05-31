@@ -103,6 +103,11 @@ public class JavaModelParse {
 
     // 将 类属性，转化为 表字段
     private static void processTableinfo(JavaModel javaModel){
+        //处理表名
+        javaModel.setTableName(javaModel.getName());
+        javaModel.setTableAlias(javaModel.getTableName().substring(0,1));
+
+
         List<JavaModel.Field> fields = javaModel.getFields();
         for(JavaModel.Field field : fields){
             field.setColumnName(SmartStringUtil.undlienNaming(field.getName()));

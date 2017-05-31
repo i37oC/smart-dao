@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * User查询对象
  */
-public class UserQuery{
+public class UserQuery extends  QueryParamBase{
 							
 	private Long[] idArray;
 					
@@ -15,7 +15,7 @@ public class UserQuery{
 
 	private Date createtimeTo;
         			
-    private Boolean isGirl;
+    private int isGirl;
 					
     private String name;
 					
@@ -51,12 +51,12 @@ public class UserQuery{
     	this.createtimeTo = createtimeTo;
     }
 					
-    public Boolean getIsGirl() {
+    public int getIsGirl() {
     	return isGirl;
     }
         
 
-    public void setIsGirl(Boolean isGirl) {
+    public void setIsGirl(int isGirl) {
     	this.isGirl = isGirl;
     }
 					

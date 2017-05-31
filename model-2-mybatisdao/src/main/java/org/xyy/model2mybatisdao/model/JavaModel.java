@@ -21,6 +21,9 @@ public class JavaModel {
     private List<Field> fields;
     private Field pkField;
 
+    private String tableName;
+    private String tableAlias;
+
     public String getObjectName() {
         return objectName;
     }
@@ -71,6 +74,22 @@ public class JavaModel {
 
     public void setFields(List<Field> fields) {
         this.fields = fields;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableAlias() {
+        return tableAlias;
+    }
+
+    public void setTableAlias(String tableAlias) {
+        this.tableAlias = tableAlias;
     }
 
     public static class Field{

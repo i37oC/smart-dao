@@ -65,4 +65,85 @@
     </select>
 
 
+    <sql id="queryCommonSql">
+        FROM $name $tableAlias
+        <where>
+			#foreach($field in $class.fields)
+				#set($type=${field.type})
+				#set($length=${field.length})
+				#set($fieldName=${field.name})
+				#set($columnName=${field.columnName})
+			##$Length
+				#if($field.isPk=="1")
+
+			<if test="${fieldName}Array != null">
+				${tableAlias}.${columnName} in
+				<foreach collection="${fieldName}Array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+
+			#else
+				#if($type=="Integer" || $type=="Long" || $type=="int")
+
+			<if test="${fieldName} != null">and ${tableAlias}.${columnName} = #{${fieldName}}  </if>
+				#elseif("$type"=="Date")
+
+			<if test="${fieldName}From != null">and ${tableAlias}.${columnName} >= #{${fieldName}From}</if>
+
+			<if test="${fieldName}To != null">
+
+ 				<![CDATA[and ${tableAlias}.${fieldName} < date_add(#{${name}To}, interval 1 day)]]>
+
+			</if>
+
+					#else
+
+			<if test="${fieldName} != null and ${fieldName}.trim() !=''">and ${tableAlias}.${columnName} = #{${fieldName}}</if>
+
+					#end
+				#end
+
+			#end
+
+        </where>
+    </sql>
+
+
+    <sql id="sortSql">
+        <choose>
+            <when test="sort != null and sort.trim() !=''">
+                order by ${sort}
+            </when>
+        </choose>
+    </sql>
+	
+	<sql id="page">
+		limit ${StartRowBegin},${pageSize}
+	</sql>
+
+    <select id="queryCount" parameterType="${objectName}Query" resultType="int">
+        select count(1)
+        <include refid="queryCommonSql" />
+    </select>
+
+    <select id="queryList" parameterType="${objectName}Query" resultMap="${objectName}Map">
+        select ${class.pkField.columnName}
+        <choose>
+            <when test="columns != null and columns.length>0">
+				<foreach collection="columns" index="index" item="item">,${item}</foreach>
+            </when>
+            <otherwise>
+				#foreach($filed in $class.fields)
+					#if($filed.isPk != 1)
+
+				,${tableAlias}.${filed.columnName}
+					#end
+				#end
+
+            </otherwise>
+        </choose>
+        <include refid="queryCommonSql" />
+        <include refid="sortSql" />
+        <include refid="page" />
+    </select>
+
 </mapper>
