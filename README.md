@@ -60,10 +60,12 @@
 
 4. 使用以下代码
 
+`
 
     new TableGenerator().gen();
     new MybatisDaoGenerator().gen();
     
+`
  
  
 
