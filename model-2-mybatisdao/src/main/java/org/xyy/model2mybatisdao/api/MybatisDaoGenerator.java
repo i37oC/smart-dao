@@ -1,14 +1,18 @@
 package org.xyy.model2mybatisdao.api;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 import org.xyy.model2mybatisdao.api.genarticles.JavaModelGenerator;
 import org.xyy.model2mybatisdao.config.Config;
 import org.xyy.model2mybatisdao.util.SmartPathUtil;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Properties;
 
 /**
  * This class is the main interface to MyBatis DAO generator. A typical execution of the tool involves these steps:
@@ -25,23 +29,37 @@ import java.nio.charset.Charset;
  * @since 1.0
  */
 public class MybatisDaoGenerator {
-    private Config config;
 
-    public MybatisDaoGenerator(Config config) {
-        this.config = config;
+
+    public void gen() throws IOException {
+        Config config = initConfig();
+
+
+
+        String sourcePackage = config.getSourcePackage();
+        if(!StringUtils.isEmpty(sourcePackage)){
+            //
+        }else{
+            String[] sourceFiles = config.getSourceFiles();
+            for(String sourceFile : sourceFiles){
+                gen(sourceFile, config);
+            }
+        }
+
+        //拷贝 commonquery.java 到 目标位置
+        Resource commonqueryfile_me = new ClassPathResource("CommonQuery.java");
+        WritableResource commonqueryfile = new FileSystemResource(SmartPathUtil.combineModel(config.getQuerycommonProject(),config.getQuerycommonPackage(),"CommonQuery"));
+        StreamUtils.copy(commonqueryfile_me.getInputStream(), commonqueryfile.getOutputStream());
+
     }
 
-    public void generate(String modelspackage){
-        //找出所有包中的 source
-    }
-
-    public void generateSingle(String modelfilepath) throws IOException {
+    private void gen(String sourceFile, Config config) throws IOException {
         // 解析
 
-        String javamodel = JavaModelGenerator.genEntity(modelfilepath,config);
-        String javaquery = JavaModelGenerator.genQuery(modelfilepath,config);
-        String javamapper = JavaModelGenerator.genMapper(modelfilepath,config);
-        String mapperxml = JavaModelGenerator.genXml(modelfilepath,config);
+        String javamodel = JavaModelGenerator.genEntity(sourceFile, config);
+        String javaquery = JavaModelGenerator.genQuery(sourceFile, config);
+        String javamapper = JavaModelGenerator.genMapper(sourceFile, config);
+        String mapperxml = JavaModelGenerator.genXml(sourceFile, config);
 
         String classname = "User";
 
@@ -59,6 +77,60 @@ public class MybatisDaoGenerator {
         StreamUtils.copy(mapperxml, Charset.forName("utf-8"), sqlmapperresource.getOutputStream());
 
     }
+
+    private Config initConfig(){
+        //先去 类路径下 加载 smart-dao.properties 文件；如果没有则报错
+        Resource resource = new ClassPathResource("smart-dao.properties");
+        if(!resource.exists()){
+            throw new IllegalArgumentException("配置文件不存在，请在类路径下建立 smart-dao.properties 并设置相关属性");
+        }
+
+        //检查 必要字段
+        Properties pps = new Properties();
+        try {
+            pps.load(resource.getInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException("读取配置文件出错");
+        }
+
+        String sourcePackage = pps.getProperty("source.package");
+        String sourceFiles = pps.getProperty("source.files");
+        if(StringUtils.isEmpty(sourcePackage) && StringUtils.isEmpty(sourceFiles)){
+            throw new IllegalArgumentException("smart-dao.properties 中 source.package 和 source.files 必须指定一个");
+        }
+
+        /*Resource sourcePackgeResource = new FileSystemResource(sourcePackage);
+        if(!sourcePackgeResource.exists()){
+            throw new IllegalArgumentException(" source.package 文件不存在");
+        }*/
+
+        //
+
+
+        Config config =  new Config();
+
+        config.setModelPackage(pps.getProperty("model.package"));
+        config.setModelProject(pps.getProperty("model.project"));
+
+        config.setQueryProject(pps.getProperty("query.project"));
+        config.setQueryPackage(pps.getProperty("query.package"));
+
+        config.setMapperProject(pps.getProperty("mapper.project"));
+        config.setMapperPackage(pps.getProperty("mapper.package"));
+
+        config.setSqlProject(pps.getProperty("xml.project"));
+        config.setSqlnamespace(pps.getProperty("xml.package"));
+
+        config.setQuerycommonProject(pps.getProperty("commonqurey.project"));
+        config.setQuerycommonPackage(pps.getProperty("commonquery.package"));
+
+        // 资源文件
+        config.setSourcePackage(sourcePackage);
+        config.setSourceFiles(sourceFiles.split(","));
+
+        return config;
+    }
+
 
 
 

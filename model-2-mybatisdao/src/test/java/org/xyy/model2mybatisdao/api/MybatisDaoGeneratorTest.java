@@ -26,7 +26,7 @@ public class MybatisDaoGeneratorTest {
 
     @Test
     public void generateSingle() throws Exception {
-        Config config = new Config();
+        /*Config config = new Config();
         config.setModelProject(javamodelpath);
         config.setQueryProject(javamodelpath);
         config.setMapperProject(javamodelpath);
@@ -39,8 +39,13 @@ public class MybatisDaoGeneratorTest {
         config.setSqlnamespace(sqlPackage);
 
         MybatisDaoGenerator generator = new MybatisDaoGenerator(config);
-        generator.generateSingle(modelPath);
+        generator.generateSingle(modelPath);*/
 
+    }
+
+    @Test
+    public void gen() throws Exception {
+        new MybatisDaoGenerator().gen();
     }
 
 }

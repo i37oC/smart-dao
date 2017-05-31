@@ -1,13 +1,13 @@
 package org.xyy.smart.dao.example.query;
 
-import java.io.Serializable;
+import org.xyy.smart.dao.example.query.CommonQuery;
 import java.util.Date;
 
 
 /**
  * User查询对象
  */
-public class UserQuery extends  QueryParamBase{
+public class UserQuery extends CommonQuery{
 							
 	private Long[] idArray;
 					
@@ -15,7 +15,7 @@ public class UserQuery extends  QueryParamBase{
 
 	private Date createtimeTo;
         			
-    private int isGirl;
+    private Integer isGirl;
 					
     private String name;
 					
@@ -51,12 +51,12 @@ public class UserQuery extends  QueryParamBase{
     	this.createtimeTo = createtimeTo;
     }
 					
-    public int getIsGirl() {
+    public Integer getIsGirl() {
     	return isGirl;
     }
         
 
-    public void setIsGirl(int isGirl) {
+    public void setIsGirl(Integer isGirl) {
     	this.isGirl = isGirl;
     }
 					

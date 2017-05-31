@@ -31,16 +31,6 @@
 			<artifactId>javaparser-core</artifactId>
 			<version>RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.javaparser</groupId>
-			<artifactId>javaparser-core</artifactId>
-			<version>RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.javaparser</groupId>
-			<artifactId>javaparser-core</artifactId>
-			<version>RELEASE</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.apache.velocity</groupId>

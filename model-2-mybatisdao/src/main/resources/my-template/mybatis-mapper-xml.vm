@@ -117,7 +117,7 @@
     </sql>
 	
 	<sql id="page">
-		limit ${StartRowBegin},${pageSize}
+		limit ${startRowBegin},${pageSize}
 	</sql>
 
     <select id="queryCount" parameterType="${objectName}Query" resultType="int">

@@ -16,6 +16,17 @@ public class Config {
     private String mapperPackage;
     private String sqlnamespace;
 
+    private String querycommonProject;
+    private String querycommonPackage;
+
+    private String sourcePackage;
+    private String[] sourceFiles;
+
+    //db
+    private String dbUrl;
+    private String dbName;
+    private String dbPass;
+
     public String getModelProject() {
         return modelProject;
     }
@@ -78,5 +89,61 @@ public class Config {
 
     public void setSqlnamespace(String sqlnamespace) {
         this.sqlnamespace = sqlnamespace;
+    }
+
+    public String getSourcePackage() {
+        return sourcePackage;
+    }
+
+    public void setSourcePackage(String sourcePackage) {
+        this.sourcePackage = sourcePackage;
+    }
+
+    public String[] getSourceFiles() {
+        return sourceFiles;
+    }
+
+    public void setSourceFiles(String[] sourceFiles) {
+        this.sourceFiles = sourceFiles;
+    }
+
+    public String getQuerycommonProject() {
+        return querycommonProject;
+    }
+
+    public void setQuerycommonProject(String querycommonProject) {
+        this.querycommonProject = querycommonProject;
+    }
+
+    public String getQuerycommonPackage() {
+        return querycommonPackage;
+    }
+
+    public void setQuerycommonPackage(String querycommonPackage) {
+        this.querycommonPackage = querycommonPackage;
+    }
+
+    public String getDbUrl() {
+        return dbUrl;
+    }
+
+    public void setDbUrl(String dbUrl) {
+        this.dbUrl = dbUrl;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public String getDbPass() {
+        return dbPass;
+    }
+
+    public void setDbPass(String dbPass) {
+        this.dbPass = dbPass;
     }
 }

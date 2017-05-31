@@ -1,13 +1,13 @@
 package ${config.queryPackage};
 
-import java.io.Serializable;
+import ${config.querycommonPackage}.CommonQuery;
 import java.util.Date;
 
 
 /**
  * ${class.name}查询对象
  */
-public class ${class.name}Query{
+public class ${class.name}Query extends CommonQuery{
 	##属性
 	#foreach($field in $class.fields)
 		#set($type=${field.type})
