@@ -4,8 +4,8 @@
 
 只需要定义 model 类，就可以逆向生成 表结构，  
 生成 DAO 所需的类 （以User为例） 
-1. User.java entity 实体类、
-2. UserQuery.java 查询对象，，mapper.xml 语句类。
+1. User.java entity 实体类
+2. UserQuery.java 查询对象
 3. UserMapper.java 查询接口
 4. UserMapper.xml  mybatis sql文件
 
