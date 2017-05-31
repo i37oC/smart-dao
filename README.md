@@ -2,7 +2,12 @@
 
 ![CSDN图标](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496232211631&di=6a258acd4398e75a911cf4167a1b9c78&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201501%2F20%2F20150120130324_zi5LM.thumb.700_0.png "这是CSDN的图标")
 
-只需要定义 model 类，就可以逆向生成 表结构，生成 DAO 所需的 entity 实体类、query 查询对象，mapper mybatis映射类，mapper.xml 语句类。
+只需要定义 model 类，就可以逆向生成 表结构，  
+生成 DAO 所需的类 （以User为例） 
+1. User.java entity 实体类、
+2. UserQuery.java 查询对象，，mapper.xml 语句类。
+3. UserMapper.java 查询接口
+4. UserMapper.xml  mybatis sql文件
 
 
 ### FEATURE
