@@ -2,7 +2,6 @@ package org.xyy.smart.dao.example;
 
 import org.xyy.model2mybatisdao.api.MybatisDaoGenerator;
 import org.xyy.model2mybatisdao.api.TableGenerator;
-import org.xyy.model2mybatisdao.model.TableModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
