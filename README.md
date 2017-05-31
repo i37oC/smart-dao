@@ -17,6 +17,7 @@
 2. 在类路径下新建一个 smart-dao.properties 文件
 3. 新建 source 文件 需要生成的实体文件，如下
 
+`
 
     /**
      * @author xyy
@@ -53,6 +54,9 @@
          */
         private String address;
     }
+        
+`
+    
 
 4. 使用以下代码
 
