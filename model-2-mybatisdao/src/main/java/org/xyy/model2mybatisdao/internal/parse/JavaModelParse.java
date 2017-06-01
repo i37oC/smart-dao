@@ -98,6 +98,9 @@ public class JavaModelParse {
         }
         javaModel.setFields(fields);
         processTableinfo(javaModel);
+
+        //设置 nonPkfields
+        processNonPkfields(javaModel);
         return javaModel;
     }
 
@@ -113,5 +116,17 @@ public class JavaModelParse {
             field.setColumnName(SmartStringUtil.undlienNaming(field.getName()));
             field.setJdbcType(new JdbcTypeResolverImpl().calculateJdbcTypeName(field.getType()));
         }
+    }
+
+    private static void processNonPkfields(JavaModel javaModel){
+        List<JavaModel.Field> fields = javaModel.getFields();
+        List<JavaModel.Field> nonPkfields = new ArrayList<>();
+        for(JavaModel.Field field : fields){
+            if(field.getIsPk()==1){
+                continue;
+            }
+            nonPkfields.add(field);
+        }
+        javaModel.setNonPkfields(nonPkfields);
     }
 }

@@ -19,10 +19,19 @@ public class JavaModel {
     private String fullPackage;
 
     private List<Field> fields;
+    private List<Field> nonPkfields;
     private Field pkField;
 
     private String tableName;
     private String tableAlias;
+
+    public List<Field> getNonPkfields() {
+        return nonPkfields;
+    }
+
+    public void setNonPkfields(List<Field> nonPkfields) {
+        this.nonPkfields = nonPkfields;
+    }
 
     public String getObjectName() {
         return objectName;
