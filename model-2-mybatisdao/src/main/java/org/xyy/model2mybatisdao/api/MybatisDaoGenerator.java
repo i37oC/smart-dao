@@ -49,8 +49,9 @@ public class MybatisDaoGenerator {
         //拷贝 commonquery.java 到 目标位置
         Resource commonqueryfile_me = new ClassPathResource("CommonQuery.java");
         WritableResource commonqueryfile = new FileSystemResource(SmartPathUtil.combineModel(config.getQuerycommonProject(),config.getQuerycommonPackage(),"CommonQuery"));
-        StreamUtils.copy(commonqueryfile_me.getInputStream(), commonqueryfile.getOutputStream());
-
+        String commonQueryStr = StreamUtils.copyToString(commonqueryfile_me.getInputStream(), Charset.forName("utf-8"));
+        commonQueryStr = commonQueryStr.replaceAll("xxxyyy", config.getQuerycommonPackage());
+        StreamUtils.copy(commonQueryStr, Charset.forName("utf-8"), commonqueryfile.getOutputStream());
     }
 
     private void gen(String sourceFile, Config config) throws IOException {
@@ -61,7 +62,9 @@ public class MybatisDaoGenerator {
         String javamapper = JavaModelGenerator.genMapper(sourceFile, config);
         String mapperxml = JavaModelGenerator.genXml(sourceFile, config);
 
-        String classname = "User";
+
+        String classname = getSourcefilename(sourceFile);
+
 
         // 写数据
         WritableResource javamodelresource = new FileSystemResource(SmartPathUtil.combineModel(config.getModelProject(),config.getModelPackage(),classname));
@@ -132,6 +135,15 @@ public class MybatisDaoGenerator {
     }
 
 
+    private static String getSourcefilename(String sourcefilePath){
+        String[] ss = sourcefilePath.split("/");
+        String classname = ss[ss.length-1].replaceAll("\\.java", "");
+        return classname;
+    }
 
+/*    public static void main(String[] args) {
+        String name = getSourcefilename("/Users/xyy/IdeaProjects/xyy-b2c/b2c-kit/src/main/java/org/xyy/b2c/kit/models/Category.java");
+        System.out.println(name);
+    }*/
 
 }

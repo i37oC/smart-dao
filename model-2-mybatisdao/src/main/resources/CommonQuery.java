@@ -1,4 +1,4 @@
-package org.xyy.smart.dao.example.query;
+package xxxyyy;
 
 /**
  * @author xyy
