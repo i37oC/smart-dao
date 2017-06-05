@@ -8,6 +8,7 @@ import org.xyy.model2mybatisdao.config.Config;
 import org.xyy.model2mybatisdao.config.JDBCConnectionConfiguration;
 import org.xyy.model2mybatisdao.util.JDBCConnectionFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +39,23 @@ public class TableGenerator {
         String sourcePackage = config.getSourcePackage();
         if(!StringUtils.isEmpty(sourcePackage)){
             //
+            File file = new File(sourcePackage);
+            if(file.isFile() || !file.exists()){
+                throw new IllegalArgumentException("sourcePackage is not exist or not a direcot");
+            }
+            File[] files = file.listFiles();
+            if(files == null || files.length==0){
+                throw new RuntimeException("sourcePackage " + sourcePackage + " contains no file");
+            }
+
+            for(File sourceFile : files){
+                String sql = TableSQLGenerator.gen(sourceFile.getAbsolutePath());
+                System.out.println(sql);
+                PreparedStatement ptmt = conn.prepareStatement(sql);
+                ptmt.execute();
+            }
+
+
         }else{
             String[] sourceFiles = config.getSourceFiles();
             for(String sourceFile : sourceFiles){

@@ -4,12 +4,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.xyy.model2mybatisdao.api.genarticles.JavaModelGenerator;
 import org.xyy.model2mybatisdao.config.Config;
 import org.xyy.model2mybatisdao.util.SmartPathUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Properties;
@@ -39,6 +42,20 @@ public class MybatisDaoGenerator {
         String sourcePackage = config.getSourcePackage();
         if(!StringUtils.isEmpty(sourcePackage)){
             //
+            File file = new File(sourcePackage);
+            if(file.isFile() || !file.exists()){
+                throw new IllegalArgumentException("sourcePackage is not exist or not a direcot");
+            }
+            File[] files = file.listFiles();
+            if(files == null || files.length==0){
+                throw new RuntimeException("sourcePackage " + sourcePackage + " contains no file");
+            }
+
+            for(File sourceFile : files){
+                gen(sourceFile.getAbsolutePath(), config);
+            }
+
+
         }else{
             String[] sourceFiles = config.getSourceFiles();
             for(String sourceFile : sourceFiles){
@@ -141,9 +158,14 @@ public class MybatisDaoGenerator {
         return classname;
     }
 
-/*    public static void main(String[] args) {
-        String name = getSourcefilename("/Users/xyy/IdeaProjects/xyy-b2c/b2c-kit/src/main/java/org/xyy/b2c/kit/models/Category.java");
-        System.out.println(name);
-    }*/
+   public static void main(String[] args) {
+        String name = "/Users/xyy/IdeaProjects/smart-dao/model-2-mybatisdao/src/main/resources/sql";
+        File file = new File(name);
+        File[] files = file.listFiles();
+       System.out.println(file);
+       for(File s : files){
+           System.out.println(s.getAbsolutePath());
+       }
+    }
 
 }
