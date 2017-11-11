@@ -22,7 +22,7 @@ package ${outputor.param.packageNameDao}.impl;
 				
 	#foreach($column in $fieldUnits)
 		#set($type=${column.type})
-		#if("$type"=="Integer" || "$type"=="BigDecimal" || "$type"=="Long" || "$type"=="Double" )
+		#if("$type"=="Integer" || "$type"=="BigDecimal" || "$type"=="Long" || "$type"=="long" || "$type"=="Double" )
 			o.set${column.fieldNameFirstCharUpcase}(JdbcUtils.getResultSet${type}(rs,"${column.columnName}"));
 		#else		
 			#if("$type"=="Date") #set($type="Timestamp") #end

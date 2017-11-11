@@ -84,18 +84,33 @@ public class MybatisDaoGenerator {
 
 
         // 写数据
-        WritableResource javamodelresource = new FileSystemResource(SmartPathUtil.combineModel(config.getModelProject(),config.getModelPackage(),classname));
-        StreamUtils.copy(javamodel, Charset.forName("utf-8"), javamodelresource.getOutputStream());
+        String javaModelTargetPath = SmartPathUtil.combineModel(config.getModelProject(),config.getModelPackage(),classname);
+        writeFile(javamodel, javaModelTargetPath);
 
-        WritableResource javamapperresource = new FileSystemResource(SmartPathUtil.combineMapper(config.getMapperProject(),config.getMapperPackage(),classname));
-        StreamUtils.copy(javamapper, Charset.forName("utf-8"), javamapperresource.getOutputStream());
+        String javamapperrTargetPath = SmartPathUtil.combineMapper(config.getMapperProject(),config.getMapperPackage(),classname);
+        writeFile(javamapper, javamapperrTargetPath);
 
-        WritableResource javaqueryresource = new FileSystemResource(SmartPathUtil.combineQuery(config.getQueryProject(),config.getQueryPackage(),classname));
-        StreamUtils.copy(javaquery, Charset.forName("utf-8"), javaqueryresource.getOutputStream());
+        String javaqueryTargetPath = SmartPathUtil.combineQuery(config.getQueryProject(),config.getQueryPackage(),classname);
+        writeFile(javaquery, javaqueryTargetPath);
 
-        WritableResource sqlmapperresource = new FileSystemResource(SmartPathUtil.combineSql(config.getSqlProject(),config.getSqlnamespace(),classname));
-        StreamUtils.copy(mapperxml, Charset.forName("utf-8"), sqlmapperresource.getOutputStream());
+        String mapperXmlTargetPath = SmartPathUtil.combineSql(config.getSqlProject(),config.getSqlnamespace(),classname);
+        writeFile(mapperxml, mapperXmlTargetPath);
 
+    }
+
+
+    private static void writeFile(String source, String targetFilePath) throws IOException {
+        File file = new File(targetFilePath);
+        File mulu = file.getParentFile();
+        //目录
+        if(!mulu.exists()){
+            mulu.mkdirs();
+        }
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        WritableResource fileSystemResource = new FileSystemResource(file);
+        StreamUtils.copy(source, Charset.forName("utf-8"), fileSystemResource.getOutputStream());
     }
 
     private Config initConfig(){
@@ -146,7 +161,7 @@ public class MybatisDaoGenerator {
 
         // 资源文件
         config.setSourcePackage(sourcePackage);
-        config.setSourceFiles(sourceFiles.split(","));
+        config.setSourceFiles(!StringUtils.isEmpty(sourceFiles)?sourceFiles.split(","):null);
 
         return config;
     }

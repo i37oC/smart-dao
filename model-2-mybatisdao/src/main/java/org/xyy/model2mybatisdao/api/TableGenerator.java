@@ -119,8 +119,7 @@ public class TableGenerator {
 
         // 资源文件
         config.setSourcePackage(sourcePackage);
-        config.setSourceFiles(sourceFiles.split(","));
-
+        config.setSourceFiles(!StringUtils.isEmpty(sourceFiles)?sourceFiles.split(","):null);
 
         config.setDbUrl(pps.getProperty("db.url"));
         config.setDbName(pps.getProperty("db.name"));

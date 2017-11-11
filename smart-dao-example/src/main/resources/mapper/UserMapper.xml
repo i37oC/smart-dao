@@ -34,8 +34,6 @@
 		User(
 		id
 		
-		<if test="id != null">,id</if>
-		
 		<if test="createtime != null">,createtime</if>
 		
 		<if test="isGirl != null">,is_girl</if>
@@ -48,8 +46,6 @@
 		
         )values(
         #{id}
-		
-		<if test="id != null">,#{id,jdbcType=BIGINT}</if>
 		
 		<if test="createtime != null">,#{createtime,jdbcType=TIMESTAMP}</if>
 		

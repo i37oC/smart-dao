@@ -15,7 +15,8 @@
 				#set($be = "<result")
 			#end
 
-		$be column="${column.name}" property="${column.columnName}"/>
+		##$be column="${column.name}" property="${column.columnName}"/>
+		$be column="${column.columnName}" property="${column.name}"/>
 		#end
 
 	</resultMap>
