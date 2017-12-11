@@ -28,6 +28,11 @@
 	</select>
 
 
+	#foreach($elem in $class.indexFields)
+	<select id="loadBy${elem.name}" parameterType="${elem.type}" resultMap="${objectName}Map" >
+		select * from ${name} where ${elem.columnName}=#{${elem.name}}
+	</select>
+	#end
 
 
     <insert id="insert" parameterType="${objectName}">

@@ -14,6 +14,10 @@ public interface ${class.name}Mapper  {
 	/***/
 	void update(${class.name} ${class.objectName});
 
+	#foreach($elem in $class.indexFields)
+	${class.name} loadBy${elem.name}(${elem.type} ${elem.name});
+	#end
+
 	##/***/
 	##void updateStatus(@Param("id") ${class.pkJavaDataType} id, @Param("status") Serializable status);
 

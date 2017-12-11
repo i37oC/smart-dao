@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import org.xyy.model2mybatisdao.annotations.LoadByIndexFiled;
 import org.xyy.model2mybatisdao.annotations.Pk;
 import org.xyy.model2mybatisdao.internal.types.JdbcTypeResolverImpl;
 import org.xyy.model2mybatisdao.model.JavaModel;
@@ -93,6 +94,11 @@ public class JavaModelParse {
                 javaModel.setPkField(field);
             }
 
+            Optional<AnnotationExpr> loadnnotationExpr = fieldDeclaration.getAnnotationByClass(LoadByIndexFiled.class);
+            if(loadnnotationExpr.isPresent()){
+                field.setIsIndex(1);
+            }
+
 
             fields.add(field);
         }
@@ -101,6 +107,7 @@ public class JavaModelParse {
 
         //设置 nonPkfields
         processNonPkfields(javaModel);
+        processIndexfields(javaModel);
         return javaModel;
     }
 
@@ -128,5 +135,16 @@ public class JavaModelParse {
             nonPkfields.add(field);
         }
         javaModel.setNonPkfields(nonPkfields);
+    }
+
+    private static void processIndexfields(JavaModel javaModel){
+        List<JavaModel.Field> fields = javaModel.getFields();
+        List<JavaModel.Field> indexfields = new ArrayList<>();
+        for(JavaModel.Field field : fields){
+            if(field.getIsIndex()==1){
+                indexfields.add(field);
+            }
+        }
+        javaModel.setIndexFields(indexfields);
     }
 }

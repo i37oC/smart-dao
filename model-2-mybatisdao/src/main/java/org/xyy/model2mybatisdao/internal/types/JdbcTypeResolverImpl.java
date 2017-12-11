@@ -27,6 +27,7 @@ public class JdbcTypeResolverImpl implements JdbcTypeResolver {
         maps.put("Integer", jdbcTypeNames.get(Types.BIGINT));
         maps.put("int", jdbcTypeNames.get(Types.INTEGER));
         maps.put("Long", jdbcTypeNames.get(Types.BIGINT));
+        maps.put("long", jdbcTypeNames.get(Types.BIGINT));
         maps.put("Date",jdbcTypeNames.get(Types.TIMESTAMP));
         maps.put("Boolean",jdbcTypeNames.get(Types.BIT));
         maps.put("String",jdbcTypeNames.get(Types.VARCHAR));

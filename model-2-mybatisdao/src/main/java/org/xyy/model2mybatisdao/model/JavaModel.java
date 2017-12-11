@@ -20,10 +20,23 @@ public class JavaModel {
 
     private List<Field> fields;
     private List<Field> nonPkfields;
+
+    // 索引字段， 根据索引 生成 loadByFiled xml 语句
+    private List<Field> indexFields;
+
+
     private Field pkField;
 
     private String tableName;
     private String tableAlias;
+
+    public List<Field> getIndexFields() {
+        return indexFields;
+    }
+
+    public void setIndexFields(List<Field> indexFields) {
+        this.indexFields = indexFields;
+    }
 
     public List<Field> getNonPkfields() {
         return nonPkfields;
@@ -110,6 +123,7 @@ public class JavaModel {
         private String comment;
         private String type;
         private int isPk;
+        private int isIndex;
 
         //---- xml 数据
         private String columnName;
@@ -122,6 +136,14 @@ public class JavaModel {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public int getIsIndex() {
+            return isIndex;
+        }
+
+        public void setIsIndex(int isIndex) {
+            this.isIndex = isIndex;
         }
 
         public String getName() {
